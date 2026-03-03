@@ -149,7 +149,11 @@ function Password() {
         </button>
 
         <button
-          onClick={() => dispatch(addPassword({ name: passwordName, password }))}
+          onClick={() => dispatch(addPassword({
+            id: Date.now(),
+            name: passwordName,
+            password,
+          }))}
           className="button"
         >
           Save
