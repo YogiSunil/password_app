@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { addPassword } from './features/passwords/passwordsSlice'
 
 // integer from 0..n-1
 function random(n) {
@@ -46,6 +48,8 @@ function generatePassword(length, mode, useHyphens) {
 }
 
 function Password() {
+  const dispatch = useDispatch()
+
   // Controlled inputs (state is the source of truth)
   const [passwordName, setPasswordName] = useState('')
   const [password, setPassword] = useState('p@$$w0rd')
@@ -138,6 +142,13 @@ function Password() {
         style={{ padding: '10px 14px', cursor: 'pointer' }}
       >
         Generate
+      </button>
+
+      <button
+        onClick={() => dispatch(addPassword({ name: passwordName, password }))}
+        style={{ padding: '10px 14px', cursor: 'pointer', marginLeft: '8px' }}
+      >
+        Save
       </button>
 
       {/* Optional display so you can see the name tied to password */}
