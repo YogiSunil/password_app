@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { addPassword } from './features/passwords/passwordsSlice'
 import PasswordStrength from './PasswordStrength'
+import './password.css'
 
 // integer from 0..n-1
 function random(n) {
@@ -61,40 +62,40 @@ function Password() {
   const [mode, setMode] = useState('all') // 'letters' | 'alphanumeric' | 'all'
 
   return (
-    <div style={{ maxWidth: '520px', margin: '0 auto', padding: '16px' }}>
-      <h2>Password Generator</h2>
+    <div className="password-container">
+      <h2 className="password-title">Password Generator</h2>
 
       {/* Challenge 2: name/description input (controlled) */}
-      <div style={{ marginBottom: '12px' }}>
-        <label>
+      <div className="password-section">
+        <label className="password-label">
           Name / Description:
           <input
             type="text"
             value={passwordName}
             onChange={(e) => setPasswordName(e.target.value)}
             placeholder="e.g. Gmail, Bank, Netflix..."
-            style={{ display: 'block', width: '100%', padding: '8px', marginTop: '6px' }}
+            className="password-input"
           />
         </label>
       </div>
 
       {/* Challenge 1: password displayed in input (controlled) */}
-      <div style={{ marginBottom: '12px' }}>
-        <label>
+      <div className="password-section">
+        <label className="password-label">
           Password:
           <input
             type="text"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            style={{ display: 'block', width: '100%', padding: '8px', marginTop: '6px' }}
+            className="password-input"
           />
         </label>
         <PasswordStrength password={password} />
       </div>
 
       {/* Stretch: length slider (controlled) */}
-      <div style={{ marginBottom: '12px' }}>
-        <label>
+      <div className="password-section">
+        <label className="password-label">
           Length: <strong>{length}</strong>
         </label>
         <input
@@ -103,31 +104,31 @@ function Password() {
           max="30"
           value={length}
           onChange={(e) => setLength(Number(e.target.value))}
-          style={{ display: 'block', width: '100%' }}
+          className="password-range"
         />
       </div>
 
       {/* Stretch: hyphen checkbox (controlled) */}
-      <div style={{ marginBottom: '12px' }}>
-        <label>
+      <div className="password-section">
+        <label className="password-label">
           <input
             type="checkbox"
             checked={useHyphens}
             onChange={(e) => setUseHyphens(e.target.checked)}
-            style={{ marginRight: '8px' }}
+            className="checkbox-input"
           />
           Add hyphens every 3 characters (xxx-xxx-xxx)
         </label>
       </div>
 
       {/* Stretch: select menu (controlled) */}
-      <div style={{ marginBottom: '16px' }}>
-        <label>
+      <div className="password-section">
+        <label className="password-label">
           Character Set:
           <select
             value={mode}
             onChange={(e) => setMode(e.target.value)}
-            style={{ display: 'block', width: '100%', padding: '8px', marginTop: '6px' }}
+            className="password-select"
           >
             <option value="letters">Letters only (AbC...)</option>
             <option value="alphanumeric">Letters + Numbers (a2B...)</option>
@@ -136,25 +137,27 @@ function Password() {
         </label>
       </div>
 
-      <button
-        onClick={() => {
-          const newPassword = generatePassword(length, mode, useHyphens)
-          setPassword(newPassword)
-        }}
-        style={{ padding: '10px 14px', cursor: 'pointer' }}
-      >
-        Generate
-      </button>
+      <div className="button-row">
+        <button
+          onClick={() => {
+            const newPassword = generatePassword(length, mode, useHyphens)
+            setPassword(newPassword)
+          }}
+          className="button"
+        >
+          Generate
+        </button>
 
-      <button
-        onClick={() => dispatch(addPassword({ name: passwordName, password }))}
-        style={{ padding: '10px 14px', cursor: 'pointer', marginLeft: '8px' }}
-      >
-        Save
-      </button>
+        <button
+          onClick={() => dispatch(addPassword({ name: passwordName, password }))}
+          className="button"
+        >
+          Save
+        </button>
+      </div>
 
       {/* Optional display so you can see the name tied to password */}
-      <div style={{ marginTop: '16px', fontSize: '14px' }}>
+      <div className="password-footer">
         <div><strong>Saved name:</strong> {passwordName || '(none)'}</div>
       </div>
     </div>

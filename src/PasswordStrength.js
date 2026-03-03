@@ -1,4 +1,5 @@
 import zxcvbn from 'zxcvbn'
+import './password.css'
 
 function getScoreLabel(score) {
   const labels = ['Very weak', 'Weak', 'Fair', 'Good', 'Strong']
@@ -16,31 +17,25 @@ function PasswordStrength({ password }) {
   const fillPercent = ((score + 1) / 5) * 100
 
   return (
-    <div style={{ marginTop: '12px' }}>
-      <div style={{ fontSize: '14px', marginBottom: '6px' }}>
-        Strength: <strong>{getScoreLabel(score)}</strong> (score: {score}/4)
+    <div className="strength-wrap">
+      <div className="strength-text">
+        <span>
+          Strength: <strong>{getScoreLabel(score)}</strong>
+        </span>
+        <span>{score}/4</span>
       </div>
 
-      <div
-        style={{
-          width: '100%',
-          height: '10px',
-          backgroundColor: '#e5e7eb',
-          borderRadius: '9999px',
-          overflow: 'hidden',
-        }}
-      >
+      <div className="strength-track">
         <div
+          className="strength-fill"
           style={{
             width: `${fillPercent}%`,
-            height: '100%',
             backgroundColor: getScoreColor(score),
-            transition: 'width 180ms ease',
           }}
         />
       </div>
 
-      <div style={{ fontSize: '12px', marginTop: '6px', color: '#374151' }}>
+      <div className="strength-hint">
         Estimated guesses: {result.guesses.toLocaleString()}
       </div>
     </div>
