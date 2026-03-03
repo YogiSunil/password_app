@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { addPassword } from './features/passwords/passwordsSlice'
+import PasswordStrength from './PasswordStrength'
 
 // integer from 0..n-1
 function random(n) {
@@ -88,6 +89,7 @@ function Password() {
             style={{ display: 'block', width: '100%', padding: '8px', marginTop: '6px' }}
           />
         </label>
+        <PasswordStrength password={password} />
       </div>
 
       {/* Stretch: length slider (controlled) */}
