@@ -40,6 +40,7 @@ function PasswordsList() {
 
   const [filterBy, setFilterBy] = useState('all')
   const [sortType, setSortType] = useState('all')
+  const [visibleMap, setVisibleMap] = useState({})
   const [editingId, setEditingId] = useState(null)
   const [editName, setEditName] = useState('')
   const [editPassword, setEditPassword] = useState('')
@@ -84,6 +85,13 @@ function PasswordsList() {
       password: editPassword,
     }))
     cancelEdit()
+  }
+
+  const toggleVisible = (id) => {
+    setVisibleMap((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }))
   }
 
   return (
@@ -139,7 +147,19 @@ function PasswordsList() {
             <>
               <div>
                 <div className="password-list-name">{item.name || 'untitled'}</div>
-                <div className="password-list-value">{item.password}</div>
+                <div className="password-value-row">
+                  <span className="password-list-value">
+                    {visibleMap[item.id] ? item.password : '•'.repeat((item.password || '').length)}
+                  </span>
+                  <button
+                    type="button"
+                    className="password-eye-button"
+                    onClick={() => toggleVisible(item.id)}
+                    aria-label={visibleMap[item.id] ? 'Hide saved password' : 'Show saved password'}
+                  >
+                    {visibleMap[item.id] ? '🙈' : '👁️'}
+                  </button>
+                </div>
                 <div className="password-priority">
                   Strength: {getStrengthLabel(item.password)} | Type: {getPasswordType(item.password)}
                 </div>

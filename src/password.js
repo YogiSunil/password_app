@@ -55,6 +55,7 @@ function Password() {
   // Controlled inputs (state is the source of truth)
   const [passwordName, setPasswordName] = useState('')
   const [password, setPassword] = useState('p@$$w0rd')
+  const [showPassword, setShowPassword] = useState(false)
 
   // Stretch controls
   const [length, setLength] = useState(9) // 9 works nicely with xxx-xxx-xxx
@@ -83,12 +84,22 @@ function Password() {
       <div className="password-section">
         <label className="password-label">
           Password:
-          <input
-            type="text"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="password-input"
-          />
+          <div className="password-input-wrap">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="password-input password-input-with-eye"
+            />
+            <button
+              type="button"
+              className="eye-button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? '🙈' : '👁️'}
+            </button>
+          </div>
         </label>
         <PasswordStrength password={password} />
       </div>
