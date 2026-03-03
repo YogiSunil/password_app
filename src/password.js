@@ -1,0 +1,151 @@
+import { useState } from 'react'
+
+// integer from 0..n-1
+function random(n) {
+  return Math.floor(Math.random() * n)
+}
+
+// returns the character set string based on mode
+function getCharSet(mode) {
+  const lettersLower = 'abcdefghijklmnopqrstuvwxyz'
+  const lettersUpper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  const numbers = '0123456789'
+  const symbols = '!@#$%^&*()-_=+[]{};:,.<>?/|\\~`'
+
+  if (mode === 'letters') {
+    return lettersLower + lettersUpper
+  }
+
+  if (mode === 'alphanumeric') {
+    return lettersLower + lettersUpper + numbers
+  }
+
+  // default: letters + numbers + symbols
+  return lettersLower + lettersUpper + numbers + symbols
+}
+
+// generate a password of given length, using chosen charset,
+// and optionally inserting hyphens every 3 characters.
+function generatePassword(length, mode, useHyphens) {
+  const chars = getCharSet(mode)
+
+  // When hyphens are ON, we generate in groups of 3: xxx-xxx-xxx...
+  // We want "length" to mean "number of characters excluding hyphens".
+  let result = ''
+
+  for (let i = 0; i < length; i++) {
+    // Insert a hyphen BEFORE character 4, 7, 10, ... (i = 3, 6, 9, ...)
+    if (useHyphens && i > 0 && i % 3 === 0) {
+      result += '-'
+    }
+
+    result += chars[random(chars.length)]
+  }
+
+  return result
+}
+
+function Password() {
+  // Controlled inputs (state is the source of truth)
+  const [passwordName, setPasswordName] = useState('')
+  const [password, setPassword] = useState('p@$$w0rd')
+
+  // Stretch controls
+  const [length, setLength] = useState(9) // 9 works nicely with xxx-xxx-xxx
+  const [useHyphens, setUseHyphens] = useState(false)
+  const [mode, setMode] = useState('all') // 'letters' | 'alphanumeric' | 'all'
+
+  return (
+    <div style={{ maxWidth: '520px', margin: '0 auto', padding: '16px' }}>
+      <h2>Password Generator</h2>
+
+      {/* Challenge 2: name/description input (controlled) */}
+      <div style={{ marginBottom: '12px' }}>
+        <label>
+          Name / Description:
+          <input
+            type="text"
+            value={passwordName}
+            onChange={(e) => setPasswordName(e.target.value)}
+            placeholder="e.g. Gmail, Bank, Netflix..."
+            style={{ display: 'block', width: '100%', padding: '8px', marginTop: '6px' }}
+          />
+        </label>
+      </div>
+
+      {/* Challenge 1: password displayed in input (controlled) */}
+      <div style={{ marginBottom: '12px' }}>
+        <label>
+          Password:
+          <input
+            type="text"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={{ display: 'block', width: '100%', padding: '8px', marginTop: '6px' }}
+          />
+        </label>
+      </div>
+
+      {/* Stretch: length slider (controlled) */}
+      <div style={{ marginBottom: '12px' }}>
+        <label>
+          Length: <strong>{length}</strong>
+        </label>
+        <input
+          type="range"
+          min="6"
+          max="30"
+          value={length}
+          onChange={(e) => setLength(Number(e.target.value))}
+          style={{ display: 'block', width: '100%' }}
+        />
+      </div>
+
+      {/* Stretch: hyphen checkbox (controlled) */}
+      <div style={{ marginBottom: '12px' }}>
+        <label>
+          <input
+            type="checkbox"
+            checked={useHyphens}
+            onChange={(e) => setUseHyphens(e.target.checked)}
+            style={{ marginRight: '8px' }}
+          />
+          Add hyphens every 3 characters (xxx-xxx-xxx)
+        </label>
+      </div>
+
+      {/* Stretch: select menu (controlled) */}
+      <div style={{ marginBottom: '16px' }}>
+        <label>
+          Character Set:
+          <select
+            value={mode}
+            onChange={(e) => setMode(e.target.value)}
+            style={{ display: 'block', width: '100%', padding: '8px', marginTop: '6px' }}
+          >
+            <option value="letters">Letters only (AbC...)</option>
+            <option value="alphanumeric">Letters + Numbers (a2B...)</option>
+            <option value="all">Letters + Numbers + Symbols (a2#...)</option>
+          </select>
+        </label>
+      </div>
+
+      <button
+        onClick={() => {
+          const newPassword = generatePassword(length, mode, useHyphens)
+          setPassword(newPassword)
+        }}
+        style={{ padding: '10px 14px', cursor: 'pointer' }}
+      >
+        Generate
+      </button>
+
+      {/* Optional display so you can see the name tied to password */}
+      <div style={{ marginTop: '16px', fontSize: '14px' }}>
+        <div><strong>Saved name:</strong> {passwordName || '(none)'}</div>
+      </div>
+    </div>
+  )
+}
+
+export default Password
